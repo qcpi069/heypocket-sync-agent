@@ -18,11 +18,11 @@ This skill enables the `heypocket-sync` subagent to synchronize new recordings f
     - For each returned item, keep only records where `updated_at > last_sync_timestamp`.
 2. **Fetch Assets for Each ID**:
     - For each recording in the response:
-        - **Duplicate Check**: Verify if a note with the current `heypocket_id` already exists in `otonic/Recordings/`. If it does, skip to the next recording.
+        - **Duplicate Check**: Verify if a note with the current `heypocket_id` already exists in `Recordings/`. If it does, skip to the next recording.
         - Call `GET /public/recordings/{id}` to fetch full details.
 
 3. **Generate Obsidian Note**:
-    - Create a file in `otonic/Recordings/YYYY-MM-DD - {Title}.md`.
+    - Create a file in `Recordings/YYYY-MM-DD - {Title}.md`.
     - Format with YAML properties: `date`, `heypocket_id`, `tags: [heypocket-sync, meeting-minutes]`.
     - **Strict Section Order**:
         1. `# {Title}`
