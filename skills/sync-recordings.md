@@ -24,6 +24,7 @@ This skill enables the `heypocket-sync` subagent to synchronize new recordings f
 3. **Generate Obsidian Note**:
     - Create a file in `Recordings/YYYY-MM-DD - {Title}.md`.
     - Format with YAML properties: `date`, `heypocket_id`, `tags: [heypocket-sync, meeting-minutes]`.
+    - **Preprocess content**: Before inserting Executive Brief content, strip any leading `### Executive Brief` heading (or similar variants like `### ✅ Action Items`) from the API response to avoid duplicate headings.
     - **Strict Section Order**:
         1. `# {Title}`
         2. `## Summary` (A concise overview of the recording)
