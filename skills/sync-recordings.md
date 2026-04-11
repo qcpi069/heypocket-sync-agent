@@ -29,7 +29,14 @@ This skill enables the `heypocket-sync` subagent to synchronize new recordings f
         2. `## Summary` (A concise overview of the recording)
         3. `## Mindmap` (The Mermaid.js diagram)
         4. `## Executive Brief` (Detailed insights, key decisions, and nuance)
-4. **Update Sync State**:
+4. **Compile Action Item Register**:
+    - Build/update `Recordings/HeyPocket Action Items.md` on every sync run.
+    - Include all current recordings (not just newly synced) to keep the register fully rebuilt and consistent.
+    - Sort groups by recording date in ascending order.
+    - Group by recording and render the recording heading itself as an Obsidian link (for example `## [[2026-04-10 - Interview - Lal Kaithayil]]`).
+    - For each recording, extract action items from the detail payload (`summarizations.*.v2.actionItems.actions`).
+    - If a recording has no action items, do not render that recording in the register.
+5. **Update Sync State**:
     - After a successful sync, update `agents/heypocket-sync/state.json` with the maximum `updated_at` timestamp among records actually processed.
     - If no newer records were processed, keep the existing `last_sync_timestamp` unchanged.
 
@@ -37,6 +44,14 @@ This skill enables the `heypocket-sync` subagent to synchronize new recordings f
 - **Incremental Sync**: The `list recordings` endpoint does not expose an `updated_after` filter. Use `start_date/end_date` server-side filtering plus client-side `updated_at > last_sync_timestamp` checks for true incremental behavior.
 - **Pagination**: Use `limit=100` and iterate `page` until no more results.
 - **Error Handling**: Handle rate limits (429) and invalid tokens (401).
+- **Action Item Register Format**:
+    - File path: `Recordings/HeyPocket Action Items.md`.
+    - Required sections per group:
+        - Recording heading (linked): `## [[YYYY-MM-DD - {Title}]]`
+        - Action list from API as Obsidian task lines using checkbox syntax:
+            - Open item: `- [ ] {action label} (assignee: {name}, due: {date_or_none}, type: {action_type})`
+            - Completed item: `- [x] {action label} (assignee: {name}, due: {date_or_none}, type: {action_type})`
+    - Omit groups entirely when no actions are available for that recording.
 - **Mind Map Format**: 
     - If the mind map returned by the API is a bulleted list, convert it into a hierarchical Mermaid mindmap block.
     - Use the recording's title as the `root` node.
@@ -65,3 +80,10 @@ Use this quick validation before or after changing sync logic.
 7. **State update rule check**:
     - If candidates were processed, set `last_sync_timestamp` to the maximum processed `updated_at`.
     - If candidates were `0`, leave `last_sync_timestamp` unchanged.
+8. **Action item register checks**:
+    - Rebuild `Recordings/HeyPocket Action Items.md` using current API data.
+    - Verify only recordings with one or more action items are rendered (no empty groups).
+    - Verify recording groups are sorted by recording date ascending.
+    - Verify each recording heading is an Obsidian link in this format: `## [[YYYY-MM-DD - {Title}]]`.
+    - Verify each action item is an Obsidian task line in this format: `- [ ] ...` or `- [x] ...`.
+    - Verify no fallback line like `- No action items returned by API.` exists in the file.
