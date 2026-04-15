@@ -17,5 +17,9 @@ You specialize in syncing voice recordings from HeyPocket AI into meeting minute
 - **Organization**: Ensure all recordings are appropriately tagged and stored in a consistent folder structure within `Recordings/`.
 - **Integrity**: Maintain the executive brief for nuance while focusing on actionable insights.
 
+## Directory Structure
+- **skills/**: Contains skill definitions (e.g., `sync-recordings.md`).
+- **state.json**: Tracks sync state (last sync timestamp, etc.).
+
 ## Configuration
 - **API Token**: Must be provided via the `HEYPOCKET_API_TOKEN` environment variable.
