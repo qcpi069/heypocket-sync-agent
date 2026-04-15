@@ -29,6 +29,35 @@ export HEYPOCKET_API_TOKEN="pk_your_api_key_here"
 - [API Reference](https://docs.heypocketai.com/docs/api) — Full API documentation for recordings, transcriptions, and summaries
 - [Pocket Guide](https://guide.heypocket.com/) — Getting started and device setup
 
+## Compatible AI Assistants
+
+Tested with:
+- OpenCode
+- Gemini
+- Claude (Desktop / Claude Code)
+- Copilot (Cursor / Windsurf)
+
 ## Usage
 
-This agent syncs recordings from HeyPocket AI. See `AGENT.md` for agent configuration and `skills/sync-recordings.md` for sync capabilities.
+1. Initialize this repo with your AI assistant
+2. Run a sync command
+
+### Commands
+
+- "Sync my HeyPocket recordings"
+- "Sync new recordings"
+- "Sync all HeyPocket recordings"
+- "Sync recordings from [date]"
+
+## Output
+
+Meeting notes are saved to the `Recordings/` folder in your Obsidian vault.
+
+## Features
+
+- **Incremental sync** — Fetches all recordings since the last sync (primary)
+- Date-based sync — Sync recordings from a specific date
+- Full sync — Sync all available recordings
+- Search and filter — Find recordings by keywords, tags, or date range
+
+See `skills/sync-recordings.md` for full capability details.
