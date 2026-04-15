@@ -1,3 +1,8 @@
+---
+name: sync-recordings
+description: Sync voice recordings from HeyPocket AI into Obsidian meeting minutes. Use when the user mentions syncing recordings, importing from HeyPocket, or updating meeting notes from voice recordings.
+---
+
 # Skill: Sync Recordings
 
 This skill enables the `heypocket-sync` subagent to synchronize new recordings from HeyPocket AI into the Obsidian vault.
@@ -18,25 +23,49 @@ This skill enables the `heypocket-sync` subagent to synchronize new recordings f
     - For each returned item, keep only records where `updated_at > last_sync_timestamp`.
 2. **Fetch Assets for Each ID**:
     - For each recording in the response:
-        - **Duplicate Check**: Verify if a note with the current `heypocket_id` already exists in `Recordings/`. If it does, skip to the next recording.
+        - **Duplicate/Stale Check**: Check if a note with the current `heypocket_id` already exists in `otonic/Recordings/`:
+            - If file **does not exist**: proceed to fetch details and create note.
+            - If file **exists with same `updated_at`**: skip (already up to date).
+            - If file **exists but `updated_at` is older** (or missing in frontmatter): overwrite with fresh data.
+            - If file **exists with no `heypocket_updated_at` in frontmatter**: compare `file.mtime` to API `updated_at`; overwrite if API is newer.
         - Call `GET /public/recordings/{id}` to fetch full details.
 
 3. **Generate Obsidian Note**:
-    - Create a file in `Recordings/YYYY-MM-DD - {Title}.md`.
-    - Format with YAML properties: `date`, `heypocket_id`, `tags: [heypocket-sync, meeting-minutes]`.
+    - Create a file in `otonic/Recordings/YYYY-MM-DD - {Title}.md`.
+    - **Sanitize the title** before creating the filename (see Filename Sanitization below).
+    - Format with YAML properties: `date`, `heypocket_id`, `heypocket_updated_at`, `tags: [heypocket-sync, meeting-minutes]`.
     - **Preprocess content**: Before inserting Executive Brief content, strip any leading `### Executive Brief` heading (or similar variants like `### ✅ Action Items`) from the API response to avoid duplicate headings.
     - **Strict Section Order**:
         1. `# {Title}`
         2. `## Summary` (A concise overview of the recording)
         3. `## Mindmap` (The Mermaid.js diagram)
         4. `## Executive Brief` (Detailed insights, key decisions, and nuance)
-4. **Compile Action Item Register**:
-    - Build/update `Recordings/HeyPocket Action Items.md` on every sync run.
-    - Include all current recordings (not just newly synced) to keep the register fully rebuilt and consistent.
-    - Sort groups by recording date in ascending order.
-    - Group by recording and render the recording heading itself as an Obsidian link (for example `## [[2026-04-10 - Interview - Lal Kaithayil]]`).
-    - For each recording, extract action items from the detail payload (`summarizations.*.v2.actionItems.actions`).
-    - If a recording has no action items, do not render that recording in the register.
+
+### Filename Sanitization
+
+Before creating or looking up a recording file, sanitize the title:
+
+| Replace | With |
+|---------|------|
+| `/`, `\`, `:`, `*`, `?`, `"`, `<`, `>`, `\|` | `-` |
+| Multiple spaces | Single space |
+| Leading/trailing whitespace | (removed) |
+| Leading/trailing dots | (removed) |
+
+- Truncate title to **100 characters max** (after sanitization)
+- Preserve the `YYYY-MM-DD - ` prefix unchanged
+
+**Example transformations**:
+- `1-on-1 with: Bob / Smith` → `1-on-1 with - Bob - Smith`
+- `  Interview - Alice.  ` → `Interview - Alice`
+- `Very long title that goes on and on and exceeds reasonable length limits` → `Very long title that goes on and on and exceeds reasonable length li`
+
+4. **Update Action Item Register**:
+    - For each **newly synced** recording that contains action items:
+        - Check if a section for the recording already exists in `otonic/Recordings/HeyPocket Action Items.md` (by searching for its unique heading).
+        - If it does not exist, append the recording heading and its action items to the end of the file.
+        - Ensure recordings are processed in chronological order (`recording_at`) during the sync to maintain the register's date-ascending structure over time.
+    - If a recording has no action items, skip adding it to the register.
 5. **Update Sync State**:
     - After a successful sync, update `agents/heypocket-sync/state.json` with the maximum `updated_at` timestamp among records actually processed.
     - If no newer records were processed, keep the existing `last_sync_timestamp` unchanged.
@@ -46,13 +75,14 @@ This skill enables the `heypocket-sync` subagent to synchronize new recordings f
 - **Pagination**: Use `limit=100` and iterate `page` until no more results.
 - **Error Handling**: Handle rate limits (429) and invalid tokens (401).
 - **Action Item Register Format**:
-    - File path: `Recordings/HeyPocket Action Items.md`.
+    - File path: `otonic/Recordings/HeyPocket Action Items.md`.
     - Required sections per group:
         - Recording heading (linked): `## [[YYYY-MM-DD - {Title}]]`
         - Action list from API as Obsidian task lines using checkbox syntax:
             - Open item: `- [ ] {action label} (assignee: {name}, due: {date_or_none}, type: {action_type})`
             - Completed item: `- [x] {action label} (assignee: {name}, due: {date_or_none}, type: {action_type})`
     - Omit groups entirely when no actions are available for that recording.
+    - **Persistence**: Append new records to the end of the file. Do not rewrite or modify existing entries once they have been added.
 - **Mind Map Format**: 
     - If the mind map returned by the API is a bulleted list, convert it into a hierarchical Mermaid mindmap block.
     - Use the recording's title as the `root` node.
@@ -82,9 +112,8 @@ Use this quick validation before or after changing sync logic.
     - If candidates were processed, set `last_sync_timestamp` to the maximum processed `updated_at`.
     - If candidates were `0`, leave `last_sync_timestamp` unchanged.
 8. **Action item register checks**:
-    - Rebuild `Recordings/HeyPocket Action Items.md` using current API data.
-    - Verify only recordings with one or more action items are rendered (no empty groups).
-    - Verify recording groups are sorted by recording date ascending.
+    - Ensure `otonic/Recordings/HeyPocket Action Items.md` was updated (appended) only for recordings newly processed in the current run.
+    - Verify only recordings with one or more action items were added.
     - Verify each recording heading is an Obsidian link in this format: `## [[YYYY-MM-DD - {Title}]]`.
     - Verify each action item is an Obsidian task line in this format: `- [ ] ...` or `- [x] ...`.
-    - Verify no fallback line like `- No action items returned by API.` exists in the file.
+    - Verify no duplicate sections were created for the same recording.
