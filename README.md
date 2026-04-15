@@ -39,7 +39,11 @@ Tested with:
 
 ## Usage
 
-1. Initialize this repo with your AI assistant
+> **Important:** This agent and sync skill expect to be run inside your Obsidian vault folder. The generated meeting notes will be saved directly to the `Recordings/` folder in your vault.
+>
+> If you run this agent outside of your Obsidian vault, you will need to manually move the generated notes into your vault.
+
+1. Initialize this repo with your AI assistant inside your Obsidian vault folder
 2. Run a sync command
 
 ### Commands

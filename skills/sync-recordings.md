@@ -3,6 +3,10 @@ name: sync-recordings
 description: Sync voice recordings from HeyPocket AI into Obsidian meeting minutes. Use when the user mentions syncing recordings, importing from HeyPocket, or updating meeting notes from voice recordings.
 ---
 
+> **Important:** This skill expects to be run inside your Obsidian vault folder. The generated meeting notes will be saved directly to the `Recordings/` folder in your vault.
+>
+> If you run this outside of your Obsidian vault, you will need to manually move the generated notes into your vault.
+
 # Skill: Sync Recordings
 
 This skill enables the `heypocket-sync` subagent to synchronize new recordings from HeyPocket AI into the Obsidian vault.
