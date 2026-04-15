@@ -35,7 +35,7 @@ Tested with:
 - [OpenCode](https://opencode-tutorial.com/en/getting-started)
 - [Gemini](https://developers.google.com/gemini-code-assist)
 - [Claude](https://code.claude.com/docs/en/desktop-quickstart.md) (Desktop / Claude Code)
-- [Copilot](https://cursor.com/help/getting-started/first-project) — [Cursor](https://cursor.com/help/getting-started/first-project) / [Windsurf](https://docs.windsurf.com/windsurf/getting-started)
+- [Copilot](https://cursor.com/help/getting-started/first-project)
 
 ## Usage
 
