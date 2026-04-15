@@ -32,10 +32,10 @@ export HEYPOCKET_API_TOKEN="pk_your_api_key_here"
 ## Compatible AI Assistants
 
 Tested with:
-- OpenCode
-- Gemini
-- Claude (Desktop / Claude Code)
-- Copilot (Cursor / Windsurf)
+- [OpenCode](https://opencode-tutorial.com/en/getting-started)
+- [Gemini](https://developers.google.com/gemini-code-assist)
+- [Claude](https://code.claude.com/docs/en/desktop-quickstart.md) (Desktop / Claude Code)
+- [Copilot](https://cursor.com/help/getting-started/first-project) — [Cursor](https://cursor.com/help/getting-started/first-project) / [Windsurf](https://docs.windsurf.com/windsurf/getting-started)
 
 ## Usage
 
