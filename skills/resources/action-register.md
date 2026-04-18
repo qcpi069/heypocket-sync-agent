@@ -1,7 +1,7 @@
 # Action Item Register
 
 ## File
-`otonic/Recordings/HeyPocket Action Items.md`
+`Recordings/HeyPocket Action Items.md`
 
 ## Format Per Recording
 

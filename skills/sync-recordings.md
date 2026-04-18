@@ -11,8 +11,8 @@ Quick reference for syncing HeyPocket recordings to Obsidian notes.
 
 1. **Check last sync** → Read `agents/heypocket-sync/state.json` for `last_sync_timestamp`
 2. **Fetch new recordings** → Call API with date window, filter by `updated_at`
-3. **Create notes** → Write to `otonic/Recordings/YYYY-MM-DD - {Title}.md`
-4. **Update action items** → Append to `otonic/Recordings/HeyPocket Action Items.md`
+3. **Create notes** → Write to `Recordings/YYYY-MM-DD - {Title}.md`
+4. **Update action items** → Append to `Recordings/HeyPocket Action Items.md`
 5. **Save state** → Update `last_sync_timestamp` to max processed `updated_at`
 
 ## Section Order (Required)

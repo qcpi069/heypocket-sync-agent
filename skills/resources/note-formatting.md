@@ -1,7 +1,7 @@
 # Note Formatting
 
 ## File Location
-`otonic/Recordings/YYYY-MM-DD - {Title}.md`
+`Recordings/YYYY-MM-DD - {Title}.md`
 
 ## YAML Frontmatter
 ```yaml
