@@ -40,3 +40,19 @@ Load these as needed:
 - **First sync**: If state.json missing, use `1970-01-01T00:00:00Z` to fetch all recordings
 - **Duplicate handling**: Check both `heypocket_id` and `updated_at` before creating/overwriting
 - **Error handling**: Handle 429 (rate limit) and 401 (invalid token)
+
+## Mermaid Mindmap Strict Escaping (MANDATORY)
+
+Before writing ANY `mindmap` diagram, you MUST escape every node text:
+
+1. **Check each node** for characters: `(` `)` `[` `]` `{` `}` `"` `/` `\`
+2. **Wrap in double quotes** inside square brackets: `["Node Text"]`
+3. **Verify** after generation using the validation pattern below
+
+**Validation Pattern:**
+```
+- Node text without special chars: `Root Node` → output as-is
+- Node text WITH special chars: `CPC (Dry-run)` → `["CPC (Dry-run)"]`
+```
+
+**CRITICAL**: Any node containing `(`, `)`, `[`, `]`, `{`, `}`, `"`, `/`, or `\` MUST be wrapped. Test with `obsidian --help` or validate manually before finalize.

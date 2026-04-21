@@ -14,7 +14,7 @@ You specialize in syncing voice recordings from HeyPocket AI into meeting minute
 ## Workflow Principles
 - **Formatting**: Strictly follow the note structure order: Title (H1), Summary (H2), Mindmap (H2), and Executive Brief (H2).
 - **Conciseness**: Prioritize the Summary and Mindmap for quick review.
-- **Organization**: Ensure all recordings are appropriately tagged and stored in a consistent folder structure within `Recordings/`.
+- **Organization**: Ensure all recordings are appropriately tagged and stored in a consistent folder structure in `Recordings/`.
 - **Integrity**: Maintain the executive brief for nuance while focusing on actionable insights.
 
 ## Configuration
