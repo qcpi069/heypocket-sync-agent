@@ -21,6 +21,15 @@ Quick reference for syncing HeyPocket recordings to Obsidian notes.
 3. `## Summary` — concise one-paragraph overview
 4. `## Executive Brief` — detailed content, subsections, key decisions
 
+## Pocket Tag Processing (MANDATORY)
+
+After extracting markdown from API, convert ALL `<pocket:*>` tags to Mermaid syntax:
+
+1. **Flowcharts**: `<pocket:flowchart title="...">...</pocket:flowchart>` → ````mermaid\nflowchart LR\n...````
+2. **Timelines**: `<pocket:timeline title="...">...</pocket:timeline>` → ````mermaid\ntimeline\n...````
+
+See `note-formatting.md` for detailed conversion rules.
+
 ## Resources
 
 Load these as needed:

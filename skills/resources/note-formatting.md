@@ -43,3 +43,35 @@ Content is nested under `summarizations[id].v2`:
    - First paragraph → `## Summary`
    - Remaining content → `## Executive Brief`
 4. **Preprocessing**: Strip any duplicate `### Executive Brief` headers that may appear in the Executive Brief section
+
+## Pocket Tag Conversion (MANDATORY)
+
+The API may return custom `<pocket:*>` tags that must be converted to Mermaid syntax:
+
+### Flowchart
+Convert `<pocket:flowchart title="...">` blocks to Mermaid flowchart:
+```mermaid
+flowchart LR
+  A[Node A] -->|Label| B[Node B]
+```
+
+Conversion rules:
+- Parse lines in format: `NodeA ->|Label| NodeB`
+- Assign sequential IDs (A, B, C...) to each unique node
+- Wrap node text in square brackets: `[Node Text]`
+- Preserve edge labels with `|Label|`
+
+### Timeline
+Convert `<pocket:timeline title="...">` blocks to Mermaid timeline:
+```mermaid
+timeline
+  title Timeline Title
+  section Section Name
+    YYYY-MM-DD : Event Description
+```
+
+Conversion rules:
+- Parse lines in format: `Date | Section | Description`
+- Group consecutive items with same section under `section` header
+- Dates can be: `YYYY-MM-DD`, `Month Day`, `Next Week`, `Today`, etc.
+- Convert to timeline syntax with proper date/event formatting
